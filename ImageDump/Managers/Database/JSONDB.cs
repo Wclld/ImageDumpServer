@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 using ImageDump.Models;
@@ -15,20 +14,20 @@ namespace ImageDump.Managers.Database
 		private const string _extention = ".json";
 		private readonly string _defaultDataFolderpath = Path.Combine(Environment.CurrentDirectory, "jsonData");
 
-		private readonly Dictionary<string, List<AbstractModel>> _dataSets;
+		private readonly Dictionary<string, IEnumerable<IModel>> _dataSets;
 
 
-		public JSONDB ( ) => _dataSets = new Dictionary<string, List<AbstractModel>>( );
+		public JSONDB ( ) => _dataSets = new Dictionary<string, IEnumerable<IModel>>( );
 
 
-		public List<T> GetData<T> ( ) where T : AbstractModel
+		public List<T> GetData<T> ( ) where T : IModel
 		{
 			var typeName = GetTypeName ( typeof ( T ) );
 
 			return _dataSets.ContainsKey( typeName ) ? _dataSets[typeName] as List<T> : LoadData<T>( typeName );
 		}
 
-		public void Update<T> ( T data ) where T : AbstractModel
+		public void Update<T> ( T data ) where T : IModel
 		{
 			//_datasets are already updated, because they are reftype
 			SaveData<T>( );
@@ -66,13 +65,19 @@ namespace ImageDump.Managers.Database
 			var data = File.Exists( dataPath ) ?
 				JsonConvert.DeserializeObject<List<T>>( File.ReadAllText( dataPath ) ) :
 				new List<T>( );
-
-			_dataSets.Add( name, data as List<AbstractModel> );
+			_dataSets.Add( name, data as IEnumerable<IModel> );
 
 			return data;
 		}
 
+		private string GetDataPath ( string typeName )
+		{
+			if (! Directory.Exists( _defaultDataFolderpath ) )
+			{
+				Directory.CreateDirectory( _defaultDataFolderpath );
+			}
+			return Path.Combine( _defaultDataFolderpath, $"{typeName}{_extention}" );
+		}
 		private string GetTypeName ( Type type ) => type.Name;
-		private string GetDataPath ( string typeName ) => Path.Combine( _defaultDataFolderpath, $"{typeName}{_extention}" );
 	}
 }

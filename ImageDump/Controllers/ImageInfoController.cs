@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 using ImageDump.Managers;
+using ImageDump.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,31 +19,47 @@ namespace ImageDump.Controllers
 			_infoManager = manager;
 		}
 
-		[HttpGet]
-		public IEnumerable<string> Get ( )
+		[HttpGet("TEST")]
+		public void CreateTestEntity( )
 		{
-			return new string[] { "value1", "value2" };
+			var value = new ImageInfo()
+			{
+				Name = "qwe",
+				Description = "asd",
+				ImagePath = "zxc"
+			};
+			_infoManager.Create( value );
+		}
+
+
+		[HttpGet]
+		public IEnumerable<ImageInfo> Get ( )
+		{
+			return _infoManager.GetAll( );
 		}
 
 		[HttpGet( "{id}" )]
-		public string Get ( int id )
+		public ImageInfo Get ( string id )
 		{
-			return "value";
+			return _infoManager.GetById( id );
 		}
 
 		[HttpPost]
-		public void Post ( [FromBody] string value )
+		public void Post ( [FromBody] ImageInfo value )
 		{
+			_infoManager.Create( value );
 		}
 
 		[HttpPut( "{id}" )]
-		public void Put ( int id, [FromBody] string value )
+		public void Put ( string id, [FromBody] ImageInfo value )
 		{
+			_infoManager.Edit( id, value );
 		}
 
 		[HttpDelete( "{id}" )]
-		public void Delete ( int id )
+		public void Delete ( string id )
 		{
+			_infoManager.Remove( id );
 		}
 	}
 }

@@ -1,14 +1,9 @@
-﻿using System;
-
-namespace ImageDump.Models
+﻿namespace ImageDump.Models
 {
-	public abstract class AbstractModel
+	public interface IModel
 	{
-		public string ID { get; private set; }
+		public string ID { get; set; }
 
-		public AbstractModel ( )
-		{
-			ID = Guid.NewGuid( ).ToString( );
-		}
+		public void GenerateID ( );
 	}
 }
