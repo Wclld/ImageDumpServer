@@ -1,5 +1,6 @@
 using ImageDump.Managers;
 using ImageDump.Managers.Database;
+using ImageDump.Managers.User;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,6 +24,9 @@ namespace ImageDump
 		{
 			services.AddSingleton<IDataProvider, JSONDB>( );
 			services.AddSingleton<ImageInfoManager>( );
+			services.AddSingleton<IUserConnectionService, UserManager>( );
+			services.AddSingleton<UserManager>( );
+			services.AddHttpClient( );
 
 			services.AddControllers( );
 		}
