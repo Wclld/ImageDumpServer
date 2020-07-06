@@ -1,8 +1,10 @@
-﻿namespace ImageDump.Managers.User
+﻿using System;
+
+namespace ImageDump.Managers.User
 {
 	public interface IUserConnectionService
 	{
-		void Connect ( string id, string userAddress );
-		void DisconnectUser ( string userAddress );
+		void Connect ( string id, Uri userAddress );
+		void DisconnectUser ( Uri userAddress );
 	}
 }

@@ -19,10 +19,12 @@ namespace ImageDump.Controllers
 
 
 		[HttpGet( "Connect" )]
-		public void Connect ( [FromForm] string userId )
+		public string Connect ( [FromForm] string userId )
 		{
 			var address = GetUserAddress( );
 			_connectionService.Connect( userId, address );
+
+			return address.Port.ToString( );;
 		}
 
 		[HttpGet( "Disconnect" )]
@@ -33,19 +35,25 @@ namespace ImageDump.Controllers
 		}
 
 
-		private string GetUserAddress ( )
+		private Uri GetUserAddress ( )
 		{
-			var result = String.Empty;
+			var builder = new UriBuilder();
 
 			var connectionFeature = HttpContext.Features.Get<IHttpConnectionFeature>();
 			if ( connectionFeature != null )
 			{
-				var remoteIp = connectionFeature?.RemoteIpAddress;
+				var remoteIp = connectionFeature?.RemoteIpAddress.ToString();
+				if ( remoteIp == "::1" )
+				{
+					remoteIp = "127.0.0.1";
+				}
+				builder.Host = remoteIp;
+				
 				var remotePort = connectionFeature?.RemotePort;
 
-				result = $"{remoteIp}:{remotePort}";
+				builder.Port = remotePort.Value;
 			}
-			return result;
+			return builder.Uri;
 		}
 	}
 }

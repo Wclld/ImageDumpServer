@@ -28,16 +28,16 @@ namespace ImageDump.Managers.User
 		}
 
 
-		public void Connect ( string id, string ip )
+		public void Connect ( string id, Uri address )
 		{
 			var user = GetByID(id);
 
-			user.Address = ip;
+			user.Address = address;
 
 			OnUserConnected?.Invoke( user );
 		}
 
-		public void DisconnectUser ( string userAddress )
+		public void DisconnectUser ( Uri userAddress )
 		{
 			var user = GetByAddress(userAddress);
 
@@ -108,7 +108,7 @@ namespace ImageDump.Managers.User
 			return result;
 		}
 
-		private UserModel GetByAddress ( string address )
+		private UserModel GetByAddress ( Uri address )
 		{
 			return _data.Find( x => x.Address == address );
 		}

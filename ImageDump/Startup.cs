@@ -26,6 +26,7 @@ namespace ImageDump
 			services.AddSingleton<ImageInfoManager>( );
 			services.AddSingleton<IUserConnectionService, UserManager>( );
 			services.AddSingleton<UserManager>( );
+			services.AddSingleton<InfoVersionManager>( );
 			services.AddHttpClient( );
 
 			services.AddControllers( );

@@ -13,10 +13,12 @@ namespace ImageDump.Controllers
 	public class ImageInfoController : ControllerBase
 	{
 		private readonly ImageInfoManager _infoManager;
+		private readonly InfoVersionManager _versionManager;
 
-		public ImageInfoController ( ImageInfoManager manager )
+		public ImageInfoController ( InfoVersionManager versionManager, ImageInfoManager infoManager )
 		{
-			_infoManager = manager;
+			_versionManager = versionManager;
+			_infoManager = infoManager;
 		}
 
 		[HttpGet("TEST")]
